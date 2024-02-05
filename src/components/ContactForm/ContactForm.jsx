@@ -1,28 +1,45 @@
 import { Formik, Form, Field } from 'formik';
 import { nanoid } from "nanoid";
 import css from './ContactForm.module.css'
+import { object, string } from 'yup';
+       
+  // Form validation schema
+  const FormValidationSchema = object({
+    name: string().required().min(3).max(50),
+    number: string().required().min(3).max(50),
+  });
+
 export const ContactForm = ({onAdd}) => {
   
   const nameFieldId = nanoid();
   const nameNumberId = nanoid();
   
   const handleSubmit = (values, actions) => { 
-    onAdd(values.name, values.number, nanoid())
+    onAdd(values.name, values.number, nanoid());
+    actions.resetForm();
   };
 
     return ( 
-      <Formik initialValues={{name: "", number: ""}} onSubmit={handleSubmit}>
-        <Form className={css.form}>
-          <div className={css.row}>
-            <label htmlFor={nameFieldId}>Username</label>
-            <Field type="text" id={nameFieldId} name="name" />
-          </div>
-          <div className={css.row}>
-            <label htmlFor={nameNumberId}>Number</label>
-            <Field type="text" id={nameNumberId} name="number" />
-          </div>
-          <button type="submit">Submit</button>
-        </Form>
+      <Formik
+        initialValues={{ name: "", number: "" }}
+        onSubmit={handleSubmit}
+        validationSchema={FormValidationSchema}
+      >
+        {({ errors, touched }) => (
+          <Form className={css.form}>
+            <div className={css.row}>
+              <label htmlFor={nameFieldId}>Username</label>
+              <Field type="text" id={nameFieldId} name="name" />
+              {touched.name && errors.name && <div className={css.error}>{errors.name}</div>}
+            </div>
+            <div className={css.row}>
+              <label htmlFor={nameNumberId}>Number</label>
+              <Field type="text" id={nameNumberId} name="number" />
+              {touched.number && errors.number && <div className={css.error}>{errors.number}</div>}
+            </div>
+            <button type="submit">Submit</button>
+          </Form>
+        )}
     </Formik>
   );
 };

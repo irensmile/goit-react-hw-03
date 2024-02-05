@@ -31,6 +31,7 @@ function App() {
   // Callback adding a single contact (and updating local storage)
   const onAdd = (name, number, id) => {
     const newContact = { id: id, name: name, number: number };
+
     const newValues = [...contactList, newContact];
     setContactList(newValues);
     localStorage.setItem("contacts", JSON.stringify(newValues));
