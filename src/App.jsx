@@ -1,8 +1,8 @@
 import './App.css'
-import {ContactForm} from './components/ContactForm/ContactForm'
+import { ContactForm } from './components/ContactForm/ContactForm'
 import { ContactList } from './components/ContactList/ContactList'
 import { SearchBox } from './components/SearchBox/SearchBox'
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 
 
 function App() {
@@ -15,15 +15,25 @@ function App() {
   ]);
   const [searchMessage, setSearchMessage] = useState("");
 
-  // Callback for deleting a single contact
+  // Load saved contacts (called once on loading)
+  useEffect(() => { 
+    const savedValues = JSON.parse(localStorage.getItem("contacts"));
+    setContactList(savedValues);
+  }, [])
+
+  // Callback for deleting a single contact (and updating local storage)
   const onDelete = (id) => {
-    setContactList(contactList.filter(contact => contact.id !== id));
+    const filteredContacts = contactList.filter(contact => contact.id !== id);
+    setContactList(filteredContacts);
+    localStorage.setItem("contacts", JSON.stringify(filteredContacts));
   }
 
-  // Callback adding a single contact
+  // Callback adding a single contact (and updating local storage)
   const onAdd = (name, number, id) => {
     const newContact = { id: id, name: name, number: number };
-    setContactList([...contactList, newContact]);
+    const newValues = [...contactList, newContact];
+    setContactList(newValues);
+    localStorage.setItem("contacts", JSON.stringify(newValues));
   }
 
   //Callback for searching
