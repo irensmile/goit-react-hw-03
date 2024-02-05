@@ -18,7 +18,9 @@ function App() {
   // Load saved contacts (called once on loading)
   useEffect(() => { 
     const savedValues = JSON.parse(localStorage.getItem("contacts"));
-    setContactList(savedValues);
+    if (savedValues) {
+      setContactList(savedValues);
+    }
   }, [])
 
   // Callback for deleting a single contact (and updating local storage)
