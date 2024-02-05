@@ -17,7 +17,13 @@ function App() {
 
   // Load saved contacts (called once on loading)
   useEffect(() => { 
-    const savedValues = JSON.parse(localStorage.getItem("contacts"));
+    let savedValues = null;
+    try {
+      savedValues = JSON.parse(localStorage.getItem("contacts"));
+    }
+    catch (err) {
+      console.log('Error on loading from local storage:', err)
+    }
     if (savedValues) {
       setContactList(savedValues);
     }
@@ -30,13 +36,20 @@ function App() {
     localStorage.setItem("contacts", JSON.stringify(filteredContacts));
   }
 
-  // Callback adding a single contact (and updating local storage)
-  const onAdd = (name, number, id) => {
-    const newContact = { id: id, name: name, number: number };
-
+  // Callback adding a single contact (and updating local storage)    
+  const onAdd = (newContact) => {
+    if (contactList.some(contact => contact.name.toLowerCase() === newContact.name.toLowerCase())) {
+      alert(`${newContact.name} is already in contacts`);
+      return;
+    }
     const newValues = [...contactList, newContact];
     setContactList(newValues);
-    localStorage.setItem("contacts", JSON.stringify(newValues));
+    try {
+      localStorage.setItem("contacts", JSON.stringify(newValues));
+    }
+    catch (err) {
+      console.log('Error on saving to local storage:', err)
+    }
   }
 
   //Callback for searching

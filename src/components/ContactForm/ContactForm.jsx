@@ -15,7 +15,7 @@ export const ContactForm = ({onAdd}) => {
   const nameNumberId = nanoid();
   
   const handleSubmit = (values, actions) => { 
-    onAdd(values.name, values.number, nanoid());
+    onAdd({ id: nanoid(), name: values.name, number: values.number })
     actions.resetForm();
   };
 
@@ -28,48 +28,18 @@ export const ContactForm = ({onAdd}) => {
         {({ errors, touched }) => (
           <Form className={css.form}>
             <div className={css.row}>
-              <label htmlFor={nameFieldId}>Username</label>
+              <div><label htmlFor={nameFieldId}>Name</label></div>
               <Field type="text" id={nameFieldId} name="name" />
-              {touched.name && errors.name && <div className={css.error}>{errors.name}</div>}
+              {touched.name && errors.name && <div>{errors.name}</div>}
             </div>
             <div className={css.row}>
-              <label htmlFor={nameNumberId}>Number</label>
+              <div><label htmlFor={nameNumberId}>Number</label></div>
               <Field type="text" id={nameNumberId} name="number" />
               {touched.number && errors.number && <div className={css.error}>{errors.number}</div>}
             </div>
-            <button type="submit">Submit</button>
+            <button type="submit">Add Contact</button>
           </Form>
         )}
     </Formik>
   );
-};
-{/* // import { nanoid } from "nanoid"; */}
-
-
-
-{/* // export const ContactForm = (props) => { */}
-
-{/* //    const handleSubmit = evt => { */}
-//         evt.preventDefault();
-//         const form = evt.currentTarget;
-//         props.onAddContact({ name: form.elements.name.value, number: form.elements.number.value });
-//         form.reset();
-//     }
-//     const nameInputId = nanoid();
-//         return (
-//             <div className={css.form}>
-//                 <form onSubmit={handleSubmit}>
-//                     <div className={css.row}>
-//                         <div><label htmlFor={nameInputId}>Name</label></div>
-//                         <div><input type="text" name="name" id={nameInputId} /></div>
-//                     </div>
-//                     <div className={css.row}>
-//                         <div><label>Number</label></div>
-//                         <div><input type="tel" name="number" required /></div>
-//                     </div>
-//                     <button className="row" type="submit">Add contact</button> 
-//                 </form>
-//             </div>)
-    
-    
-// }
+}
